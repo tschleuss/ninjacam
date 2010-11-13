@@ -12,12 +12,12 @@ public final class SystemConfig {
 	/**
 	 * Width da janela da aplicacao.
 	 */
-	public static final int APP_WIDTH = 320;
+	public static final int APP_WIDTH = 480;
 	
 	/**
 	 * Height da janela da aplicacao.
 	 */
-	public static final int APP_HEIGHT = 240;
+	public static final int APP_HEIGHT = 360;
 	
 	/**
 	 * Width da imagem da fruta.
