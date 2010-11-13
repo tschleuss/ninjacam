@@ -95,12 +95,13 @@ public class FruitAnimation {
 			final String fruitPath = mf.format(new Object[]{name});
 			
 			fruit = new Fruit();
-			InputStream fruitIs = ResourceLocator.getResource(fruitPath, FruitAnimation.class);
+			
+			InputStream fruitIs = ResourceLocator.getResource(fruitPath, FruitAnimation.class); 
 			BufferedImage fruitImg = ImageIO.read(fruitIs);
 			fruitImg = resize(fruitImg, SystemConfig.FRUIT_WIDTH, SystemConfig.FRUIT_HEIGHT);
+			
 			fruit.setImg(fruitImg);
 			fruit.setX( rnd.nextInt(SystemConfig.APP_WIDTH) );
-			System.out.println(fruit.getX());
 			fruit.setY( rnd.nextInt(SystemConfig.APP_HEIGHT)*-1 );
 			
 		} catch (Exception e) {
