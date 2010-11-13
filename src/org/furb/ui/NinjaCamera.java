@@ -12,6 +12,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 import org.furb.processor.MarcadorObj;
+import org.furb.ui.fruit.FruitAnimation;
+import org.furb.utils.SystemConfig;
 
 import vxp.PixelSource;
 import vxp.QTLivePixelSource;
@@ -20,30 +22,37 @@ import vxp.VideoListener;
 public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 {
 	
+	/**
+	 * SerialVersion default.
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private PixelSource camera;
 	private BufferedImage borda;
 	private BufferedImage imagemCapturada;
-
-	private int largura;
-	private int altura;
-
 	private long tempoAtualizacao;
-
 	private MarcadorObj marcador;
+	private FruitAnimation fruitAnimation;
 	
+	/**
+	 * Construtor padroa.
+	 */
 	public NinjaCamera()
 	{
 		this.initConfig();
 		this.initComponents();
 	}
 	
+	/**
+	 * Inicializa as configuracoes
+	 * da aplicacao.
+	 */
 	private void initConfig()
 	{
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-	
 		this.setIconImage(new ImageIcon(this.getClass().getResource("/org/furb/img/icon.png")).getImage());
-		this.setTitle("NinjaCam");	
-		this.setSize(this.largura, this.altura);
+		this.setTitle("NinjaCam");
+		this.setSize(SystemConfig.APP_WIDTH, SystemConfig.APP_HEIGHT);
 	}
 	
 	//inicializa atributos e objetos necessários para capturar a imagem da webcam
@@ -51,17 +60,16 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 	{
 		//este atributo pode ser utilizado para exiber qual é a taxa de atualizao da imagem 
 		this.tempoAtualizacao = 0;
-		this.largura = 320;
-		this.altura = 240;
-		
 		this.marcador = new MarcadorObj();
-		this.camera = new QTLivePixelSource(largura, altura, 30);
+		this.camera = new QTLivePixelSource(SystemConfig.APP_WIDTH, SystemConfig.APP_HEIGHT, 30);
 		
 		//algumas vezes a largura do video é diferente da largura que foi forçada
-		this.largura = camera.getVideoWidth(); 
-
-		this.borda = new BufferedImage(this.largura, this.altura, BufferedImage.TYPE_INT_ARGB);
-
+		//this.largura = camera.getVideoWidth();
+		this.borda = new BufferedImage(SystemConfig.APP_WIDTH, SystemConfig.APP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
+		
+		fruitAnimation = new FruitAnimation();
+		fruitAnimation.init();
+		
 		//LISTENERS
 		//{
 			//inicia a captação dos frames
@@ -113,6 +121,9 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 			}
 			
 			g.drawImage(borda, 0, 0, null);
+			
+			fruitAnimation.recalcule();
+			fruitAnimation.paint(g);
 		}
 	}
 
@@ -127,20 +138,20 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 		this.marcador.setCorRastreada(cor[0], cor[1], cor[2]);
 	}
 
-	public void mouseEntered(MouseEvent e) 
-	{
+	public void mouseEntered(MouseEvent e) {
+		return;
 	}
 
-	public void mouseExited(MouseEvent e) 
-	{
+	public void mouseExited(MouseEvent e) {
+		return;
 	}
 
-	public void mousePressed(MouseEvent e) 
-	{
+	public void mousePressed(MouseEvent e) {
+		return;
 	}
 
-	public void mouseReleased(MouseEvent e) 
-	{
+	public void mouseReleased(MouseEvent e) {
+		return;
 	}
 	
 }
