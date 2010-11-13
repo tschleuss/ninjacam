@@ -5,7 +5,12 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
+import java.awt.image.LookupOp;
+import java.awt.image.ShortLookupTable;
 import java.awt.image.WritableRaster;
 
 import javax.swing.ImageIcon;
@@ -90,6 +95,7 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 		
 		//transforma o frame em imagem
 		this.imagemCapturada = camera.getImage();
+		this.inverterImagem();
 		
 		//verifica aonde está o objeto rastreado na imagem atual
 		this.marcador.calcularMarcador(imagemCapturada);
@@ -100,6 +106,19 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 		this.tempoAtualizacao = System.currentTimeMillis() - inicioAtualizacao;
 	}
 
+	private void inverterImagem()
+	{
+		AffineTransform transform = AffineTransform.getScaleInstance(-1, 1); 
+		
+		//translada a imagem
+		transform.translate(- imagemCapturada.getWidth(null), 0); 
+		
+		AffineTransformOp  operaTransform = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+		
+		//aplica a translação
+		imagemCapturada = operaTransform.filter(imagemCapturada, null); 
+	}
+	
 	//exibe imagem da camera
 	public void paint(Graphics g) 
 	{
