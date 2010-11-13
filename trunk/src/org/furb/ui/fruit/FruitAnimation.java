@@ -48,7 +48,6 @@ public class FruitAnimation {
 		fruitList.add( getFruit("Orange2.png")		);
 		fruitList.add( getFruit("Strawberry.png")	);
 		fruitList.add( getFruit("Tomato.png")		);
-		//fruitList.add( getFruit("Bomb.png")			);
 	}
 	
 	/**
