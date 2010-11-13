@@ -2,6 +2,7 @@ package org.furb.ui.fruit;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.text.MessageFormat;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 import org.furb.utils.ResourceLocator;
 import org.furb.utils.SystemConfig;
@@ -22,8 +24,10 @@ import org.furb.utils.SystemConfig;
  */
 public class FruitAnimation {
 
-	private List<Fruit> fruitList = null;
+	public List<Fruit> fruitList = null;
 	private Random rnd = null;
+	
+	private int velocidadeQueda;
 	
 	/**
 	 * Construtor padrao.
@@ -39,6 +43,7 @@ public class FruitAnimation {
 	public void init() {
 		rnd = new Random(System.currentTimeMillis());
 		fruitList = new ArrayList<Fruit>();
+		/*
 		fruitList.add( getFruit("Apple.png")		);
 		fruitList.add( getFruit("Apple2.png")		);
 		fruitList.add( getFruit("Kiwi.png") 		);
@@ -48,6 +53,13 @@ public class FruitAnimation {
 		fruitList.add( getFruit("Orange2.png")		);
 		fruitList.add( getFruit("Strawberry.png")	);
 		fruitList.add( getFruit("Tomato.png")		);
+		*/
+		
+		fruitList.add( getFruit("gif/apple.gif")		);
+		fruitList.add( getFruit("gif/Strawberry.gif")	);
+		fruitList.add( getFruit("gif/Orange.gif")		);
+		
+		this.velocidadeQueda = 10;
 	}
 	
 	/**
@@ -57,7 +69,7 @@ public class FruitAnimation {
 	public void recalcule() {
 		for( Fruit f : fruitList ) {
 			if( f.getY() < SystemConfig.APP_HEIGHT ) {
-				f.setY( f.getY() + 5 );
+				f.setY( f.getY() + this.velocidadeQueda );
 			} else {
 				f.setX( rnd.nextInt(SystemConfig.APP_WIDTH) );
 				f.setY( rnd.nextInt(SystemConfig.APP_HEIGHT) * -1 );
@@ -73,7 +85,7 @@ public class FruitAnimation {
 	 */
 	public void paint(Graphics g) {
 		for( Fruit f : fruitList ) {
-			g.drawImage(f.getImg(), f.getX(), f.getY(), null);
+			g.drawImage(f.getImg().getImage(), f.getX(), f.getY(), null);
 		}
 	}
 	
@@ -90,16 +102,20 @@ public class FruitAnimation {
 		
 		try {
 			
+			fruit = new Fruit();
+			
+			/*
 			final MessageFormat mf = new MessageFormat("/org/furb/img/{0}");
 			final String fruitPath = mf.format(new Object[]{name});
-			
-			fruit = new Fruit();
 			
 			InputStream fruitIs = ResourceLocator.getResource(fruitPath, FruitAnimation.class); 
 			BufferedImage fruitImg = ImageIO.read(fruitIs);
 			fruitImg = resize(fruitImg, SystemConfig.FRUIT_WIDTH, SystemConfig.FRUIT_HEIGHT);
+			*/
 			
-			fruit.setImg(fruitImg);
+			ImageIcon fruitImage = new ImageIcon(this.getClass().getResource("/org/furb/img/" + name));
+			
+			fruit.setImg(fruitImage);
 			fruit.setX( rnd.nextInt(SystemConfig.APP_WIDTH) );
 			fruit.setY( rnd.nextInt(SystemConfig.APP_HEIGHT)*-1 );
 			
