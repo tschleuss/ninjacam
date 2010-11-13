@@ -8,9 +8,6 @@ import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.LookupOp;
-import java.awt.image.ShortLookupTable;
 import java.awt.image.WritableRaster;
 
 import javax.swing.ImageIcon;
@@ -122,6 +119,7 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 	//exibe imagem da camera
 	public void paint(Graphics g) 
 	{
+		
 		if (this.imagemCapturada != null) 
 		{
 			//imagem com frame + marcador
@@ -144,6 +142,9 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 			fruitAnimation.recalcule();
 			fruitAnimation.paint(g);
 		}
+		
+		
+		//g.drawImage(fruitAnimation.fruitList.get(0).getImg().getImage(), 100,200, null);
 	}
 
 	//indica qual é a nova cor rastreada

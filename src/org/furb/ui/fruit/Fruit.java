@@ -1,6 +1,6 @@
 package org.furb.ui.fruit;
 
-import java.awt.image.BufferedImage;
+import javax.swing.ImageIcon;
 
 /**
  * Entidade responsavel por armazenas
@@ -15,7 +15,7 @@ public class Fruit {
 	private int y;
 	private int width;
 	private int height;
-	private BufferedImage img;
+	private ImageIcon img;
 	private int hits;
 	private int destroyed;
 	
@@ -82,17 +82,17 @@ public class Fruit {
 	/**
 	 * @return the img
 	 */
-	public final BufferedImage getImg() {
+	public final ImageIcon getImg() {
 		return img;
 	}
 
 	/**
 	 * @param img the img to set
 	 */
-	public final void setImg(BufferedImage img) {
+	public final void setImg(ImageIcon img) {
 		this.img = img;
-		setWidth(img.getWidth());
-		setHeight(img.getHeight());
+		setWidth(img.getIconWidth());
+		setHeight(img.getIconHeight());
 	}
 
 	/**

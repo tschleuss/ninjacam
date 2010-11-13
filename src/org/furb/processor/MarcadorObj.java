@@ -19,7 +19,7 @@ public class MarcadorObj
 		this.limiteDifCor = 30;
 		
 		this.corRastreada = new int [3];
-		this.setCorRastreada(0,0,0);
+		this.setCorRastreada(255,0,0);
 	}
 	
 	//verifica aonde está a cor rastreada na imagem atual
