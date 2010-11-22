@@ -17,10 +17,11 @@ public class Fruit {
 	private int height;
 	private ImageIcon img;
 	private int hits;
-	private int destroyed;
+	private boolean destroyed;
 	
 	public Fruit() {
 		super();
+		this.destroyed = false;
 	}
 
 	/**
@@ -112,14 +113,14 @@ public class Fruit {
 	/**
 	 * @return the destroyed
 	 */
-	public final int getDestroyed() {
+	public final boolean isDestroyed() {
 		return destroyed;
 	}
 
 	/**
 	 * @param destroyed the destroyed to set
 	 */
-	public final void setDestroyed(int destroyed) {
+	public final void setDestroyed(boolean destroyed) {
 		this.destroyed = destroyed;
 	}
 }
