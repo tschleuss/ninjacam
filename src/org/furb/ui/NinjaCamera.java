@@ -1,11 +1,13 @@
 package org.furb.ui;
 
+import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
@@ -32,9 +34,9 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 	private PixelSource camera;
 	private BufferedImage borda;
 	private BufferedImage imagemCapturada;
-	private long tempoAtualizacao;
 	private MarcadorObj marcador;
 	private FruitAnimation fruitAnimation;
+	private final static BasicStroke stroke = new BasicStroke(5.0f);
 	
 	/**
 	 * Construtor padroa.
@@ -55,13 +57,12 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 		this.setIconImage(new ImageIcon(this.getClass().getResource("/org/furb/img/icon.png")).getImage());
 		this.setTitle("NinjaCam");
 		this.setSize(SystemConfig.APP_WIDTH, SystemConfig.APP_HEIGHT);
+		this.setLocationRelativeTo(null);
 	}
 	
 	//inicializa atributos e objetos necessários para capturar a imagem da webcam
 	private void initComponents()
 	{
-		//este atributo pode ser utilizado para exiber qual é a taxa de atualizao da imagem 
-		this.tempoAtualizacao = 0;
 		this.marcador = new MarcadorObj();
 		this.camera = new QTLivePixelSource(SystemConfig.APP_WIDTH, SystemConfig.APP_HEIGHT, 30);
 		
@@ -76,7 +77,6 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 		//{
 			//inicia a captação dos frames
 			this.camera.addVideoListener(this);
-			
 			this.addMouseListener(this);
 		//}
 	}
@@ -84,10 +84,6 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 	//método obrigatório (VideoListener) 
 	public void newFrame() 
 	{
-		
-		// called everytime there is a new frame
-		long inicioAtualizacao = System.currentTimeMillis();
-		
 		this.camera.grabFrame();
 		
 		//transforma o frame em imagem
@@ -99,8 +95,6 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 		
 		//atualiza imagem
 		repaint();
-		
-		this.tempoAtualizacao = System.currentTimeMillis() - inicioAtualizacao;
 	}
 
 	private void inverterImagem()
@@ -119,7 +113,6 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 	//exibe imagem da camera
 	public void paint(Graphics g) 
 	{
-		
 		if (this.imagemCapturada != null) 
 		{
 			//imagem com frame + marcador
@@ -128,13 +121,20 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 			//desenha frame
 			offScreenGraphics.drawImage(this.imagemCapturada, 0, 0, null);
 			
-			Rectangle sinalizadorObj = this.marcador.getMarcador();
+			Line2D line = this.marcador.getMarcador();
 			
 			//desenha marcador
-			if (sinalizadorObj != null)
+			if (line != null)
 			{
-				offScreenGraphics.drawRect(sinalizadorObj.x, sinalizadorObj.y
-										  ,sinalizadorObj.width, sinalizadorObj.height);
+				offScreenGraphics.setColor(Color.BLACK);
+				offScreenGraphics.setBackground(Color.BLACK);
+				offScreenGraphics.setStroke(stroke);
+				offScreenGraphics.drawLine(
+					(int)line.getX1(), (int)line.getY1(), 
+					(int)line.getX2(), (int)line.getY2()
+				);
+				//drawRect(sinalizadorObj.getX1()x, sinalizadorObj.y
+				//,sinalizadorObj.width, sinalizadorObj.height);
 			}
 			
 			g.drawImage(borda, 0, 0, null);
@@ -142,9 +142,6 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 			fruitAnimation.recalcule();
 			fruitAnimation.paint(g);
 		}
-		
-		
-		//g.drawImage(fruitAnimation.fruitList.get(0).getImg().getImage(), 100,200, null);
 	}
 
 	//indica qual é a nova cor rastreada
