@@ -2,18 +2,13 @@ package org.furb.ui.fruit;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.InputStream;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
-import org.furb.utils.ResourceLocator;
 import org.furb.utils.SystemConfig;
 
 /**
@@ -24,7 +19,7 @@ import org.furb.utils.SystemConfig;
  */
 public class FruitAnimation {
 
-	public List<Fruit> fruitList = null;
+	private List<Fruit> fruitList = null;
 	private Random rnd = null;
 	
 	private int velocidadeQueda;
