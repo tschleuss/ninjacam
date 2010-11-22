@@ -15,6 +15,7 @@ import java.awt.image.WritableRaster;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
+import org.furb.processor.ColisionDetector;
 import org.furb.processor.MarcadorObj;
 import org.furb.ui.fruit.FruitAnimation;
 import org.furb.utils.SystemConfig;
@@ -36,6 +37,9 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 	private BufferedImage imagemCapturada;
 	private MarcadorObj marcador;
 	private FruitAnimation fruitAnimation;
+	private ColisionDetector colisionDetector;
+	private Graphics2D offScreenGraphics;
+	private Line2D line;
 	private final static BasicStroke stroke = new BasicStroke(5.0f);
 	
 	/**
@@ -70,12 +74,13 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 		//this.largura = camera.getVideoWidth();
 		this.borda = new BufferedImage(SystemConfig.APP_WIDTH, SystemConfig.APP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 		
+		colisionDetector = new ColisionDetector();
 		fruitAnimation = new FruitAnimation();
 		fruitAnimation.init();
 		
 		//LISTENERS
 		//{
-			//inicia a captação dos frames
+			//inicia a captacao dos frames
 			this.camera.addVideoListener(this);
 			this.addMouseListener(this);
 		//}
@@ -116,12 +121,12 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 		if (this.imagemCapturada != null) 
 		{
 			//imagem com frame + marcador
-			Graphics2D offScreenGraphics = this.borda.createGraphics();
+			offScreenGraphics = this.borda.createGraphics();
 			
 			//desenha frame
 			offScreenGraphics.drawImage(this.imagemCapturada, 0, 0, null);
 			
-			Line2D line = this.marcador.getMarcador();
+			line = this.marcador.getMarcador();
 			
 			//desenha marcador
 			if (line != null)
@@ -133,6 +138,8 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 					(int)line.getX1(), (int)line.getY1(), 
 					(int)line.getX2(), (int)line.getY2()
 				);
+				
+				colisionDetector.check(this.fruitAnimation.getFruitList(), line);
 				//drawRect(sinalizadorObj.getX1()x, sinalizadorObj.y
 				//,sinalizadorObj.width, sinalizadorObj.height);
 			}

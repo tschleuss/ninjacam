@@ -63,11 +63,12 @@ public class FruitAnimation {
 	 */
 	public void recalcule() {
 		for( Fruit f : fruitList ) {
-			if( f.getY() < SystemConfig.APP_HEIGHT ) {
+			if( f.getY() < SystemConfig.APP_HEIGHT && !f.isDestroyed() ) {
 				f.setY( f.getY() + this.velocidadeQueda );
 			} else {
 				f.setX( rnd.nextInt(SystemConfig.APP_WIDTH) );
 				f.setY( rnd.nextInt(SystemConfig.APP_HEIGHT) * -1 );
+				f.setDestroyed(false);
 			}
 		}
 	}
@@ -80,7 +81,11 @@ public class FruitAnimation {
 	 */
 	public void paint(Graphics g) {
 		for( Fruit f : fruitList ) {
-			g.drawImage(f.getImg().getImage(), f.getX(), f.getY(), null);
+			if( f.isDestroyed() ) {
+				//FAZ ALGO..
+			} else {
+				g.drawImage(f.getImg().getImage(), f.getX(), f.getY(), null);
+			}
 		}
 	}
 	
@@ -139,5 +144,12 @@ public class FruitAnimation {
 		g.drawImage(image, 0, 0, width, height, null);
 		g.dispose();
 		return resizedImage;
+	}
+
+	/**
+	 * @return the fruitList
+	 */
+	public final List<Fruit> getFruitList() {
+		return fruitList;
 	}
 }
