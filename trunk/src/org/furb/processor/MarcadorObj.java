@@ -1,6 +1,7 @@
 package org.furb.processor;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
@@ -9,6 +10,7 @@ public class MarcadorObj
 {
 
 	private Line2D marcador;
+	public Rectangle rect;
 	
 	private int limiteDifCor;
 	private Cor processadorCor;
@@ -17,7 +19,7 @@ public class MarcadorObj
 	public MarcadorObj()
 	{	
 		this.processadorCor = new Cor();
-		this.limiteDifCor = 30;
+		this.limiteDifCor = 40;
 		
 		this.corRastreada = new int [3];
 		this.setCorRastreada(255,0,0);
@@ -51,12 +53,12 @@ public class MarcadorObj
 				{
 					if (p1 == null) {
 						//cria o marcador, sem altura e largura
-						//this.marcador = new Rectangle(y, x, 0, 0);
+						this.rect = new Rectangle(y, x, 0, 0);
 						//this.marcador = new Line2D.
 						p1 = new Point(y, x);
 					} else {
 						//adiciona o pixel ao retangulo que está marcando a imagem
-						//this.marcador.add(y, x);
+						this.rect.add(y, x);
 						p2.x =  y;
 						p2.y =  x;
 					}
