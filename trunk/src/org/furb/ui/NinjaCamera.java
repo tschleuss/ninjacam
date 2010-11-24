@@ -2,7 +2,6 @@ package org.furb.ui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -18,7 +17,6 @@ import java.text.AttributedString;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 
 import org.furb.processor.ColisionDetector;
 import org.furb.processor.MarcadorObj;
@@ -37,17 +35,16 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private final static BasicStroke stroke = new BasicStroke(5.0f);
 	private PixelSource camera;
 	private BufferedImage borda;
 	private BufferedImage imagemCapturada;
 	private MarcadorObj marcador;
 	private FruitAnimation fruitAnimation;
 	private ColisionDetector colisionDetector;
-	private Graphics2D offScreenGraphics;
+	private Graphics2D g2d;
 	private Line2D line;
 	private Rectangle retang;
-	private final static BasicStroke stroke = new BasicStroke(5.0f);
-	
 	private AttributedString titleScore;
 	private AttributedString score;
 	
@@ -77,26 +74,20 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 	private void initComponents()
 	{
 		this.marcador = new MarcadorObj();
-		this.camera = new QTLivePixelSource(SystemConfig.APP_WIDTH, SystemConfig.APP_HEIGHT, 30);
-		
-		//algumas vezes a largura do video é diferente da largura que foi forçada
-		//this.largura = camera.getVideoWidth();
+		this.camera = new QTLivePixelSource(SystemConfig.CAM_WIDTH, SystemConfig.CAM_HEIGHT, 30);
 		this.borda = new BufferedImage(SystemConfig.APP_WIDTH, SystemConfig.APP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 		
-		titleScore = new AttributedString("PONTUAÇÃO: ");
+		titleScore = new AttributedString("PONTUACAO: ");
 		titleScore.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
-		titleScore.addAttribute(TextAttribute.FOREGROUND, Color.WHITE);
+		titleScore.addAttribute(TextAttribute.FOREGROUND, Color.BLUE);
 
 		colisionDetector = new ColisionDetector();
 		fruitAnimation = new FruitAnimation();
 		fruitAnimation.init();
-		
-		//LISTENERS
-		//{
-			//inicia a captacao dos frames
-			this.camera.addVideoListener(this);
-			this.addMouseListener(this);
-		//}
+
+		//inicia a captacao dos frames
+		this.camera.addVideoListener(this);
+		this.addMouseListener(this);
 	}
 	
 	//método obrigatório (VideoListener) 
@@ -124,7 +115,7 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 		
 		AffineTransformOp  operaTransform = new AffineTransformOp(transform, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
 		
-		//aplica a translação
+		//aplica a translacao
 		imagemCapturada = operaTransform.filter(imagemCapturada, null); 
 	}
 	
@@ -134,35 +125,37 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 		if (this.imagemCapturada != null) 
 		{
 			//imagem com frame + marcador
-			offScreenGraphics = this.borda.createGraphics();
+			g2d = this.borda.createGraphics();
 			
 			//desenha frame
-			offScreenGraphics.drawImage(this.imagemCapturada, 0, 0, null);
+			g2d.drawImage(this.imagemCapturada, 0, 0, SystemConfig.APP_WIDTH, SystemConfig.APP_HEIGHT, null);
 			
 			line = this.marcador.getMarcador();
 			retang = this.marcador.rect;
 			
 			if(retang != null)
 			{
-				offScreenGraphics.drawRect(retang.x, retang.y,retang.width, retang.height);
+				g2d.drawRect(retang.x, retang.y,retang.width, retang.height);
 			}
 			
 			//desenha marcador
 			if (line != null)
 			{
-				offScreenGraphics.setColor(Color.BLACK);
-				offScreenGraphics.setBackground(Color.BLACK);
-				offScreenGraphics.setStroke(stroke);
-				offScreenGraphics.drawLine(
+				g2d.setColor(Color.BLACK);
+				g2d.setBackground(Color.BLACK);
+				g2d.setStroke(stroke);
+				g2d.drawLine(
 					(int)line.getX1(), (int)line.getY1(), 
 					(int)line.getX2(), (int)line.getY2()
 				);
 				
+				//Verifica a colisao com as frutas
 				colisionDetector.check(this.fruitAnimation.getFruitList(), line);
 			}
 			
 			g.drawImage(borda, 0, 0, null);
 			
+			//Recalcula e redesenha as frutas
 			fruitAnimation.recalcule();
 			fruitAnimation.paint(g);
 			
@@ -184,7 +177,9 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 		WritableRaster rasterImagem = this.imagemCapturada.getRaster();
 		
 		int[] cor = new int[4];
-		rasterImagem.getPixel(e.getX(), e.getY(), cor);
+		//Como a imagem e esticada apos o processamento, converter os pontos em tela
+		final int coords[] = SystemConfig.convertPointToReal(e.getX(), e.getY());
+		rasterImagem.getPixel(coords[0], coords[1], cor);
 		
 		this.marcador.setCorRastreada(cor[0], cor[1], cor[2]);
 	}
