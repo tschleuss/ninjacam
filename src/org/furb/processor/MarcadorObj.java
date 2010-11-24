@@ -6,6 +6,8 @@ import java.awt.geom.Line2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 
+import org.furb.utils.SystemConfig;
+
 public class MarcadorObj
 {
 
@@ -51,16 +53,19 @@ public class MarcadorObj
 
 				if (diferencaCor < this.limiteDifCor) 
 				{
+					final int[] coords = SystemConfig.convertPointToVirtual(x, y);
+					
 					if (p1 == null) {
 						//cria o marcador, sem altura e largura
-						this.rect = new Rectangle(y, x, 0, 0);
+						this.rect = new Rectangle(coords[1], coords[0], 0, 0);
 						//this.marcador = new Line2D.
-						p1 = new Point(y, x);
+						p1 = new Point(coords[1], coords[0]);
 					} else {
 						//adiciona o pixel ao retangulo que está marcando a imagem
-						this.rect.add(y, x);
-						p2.x =  y;
-						p2.y =  x;
+						
+						this.rect.add(coords[1], coords[0]);
+						p2.x =  coords[1];
+						p2.y =  coords[0];
 					}
 				}
 			}
