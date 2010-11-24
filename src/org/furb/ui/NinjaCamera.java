@@ -2,18 +2,23 @@ package org.furb.ui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.font.TextAttribute;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
+import java.text.AttributedString;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 import org.furb.processor.ColisionDetector;
 import org.furb.processor.MarcadorObj;
@@ -40,7 +45,11 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 	private ColisionDetector colisionDetector;
 	private Graphics2D offScreenGraphics;
 	private Line2D line;
+	private Rectangle retang;
 	private final static BasicStroke stroke = new BasicStroke(5.0f);
+	
+	private AttributedString titleScore;
+	private AttributedString score;
 	
 	/**
 	 * Construtor padroa.
@@ -74,6 +83,10 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 		//this.largura = camera.getVideoWidth();
 		this.borda = new BufferedImage(SystemConfig.APP_WIDTH, SystemConfig.APP_HEIGHT, BufferedImage.TYPE_INT_ARGB);
 		
+		titleScore = new AttributedString("PONTUAÇÃO: ");
+		titleScore.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
+		titleScore.addAttribute(TextAttribute.FOREGROUND, Color.WHITE);
+
 		colisionDetector = new ColisionDetector();
 		fruitAnimation = new FruitAnimation();
 		fruitAnimation.init();
@@ -127,6 +140,12 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 			offScreenGraphics.drawImage(this.imagemCapturada, 0, 0, null);
 			
 			line = this.marcador.getMarcador();
+			retang = this.marcador.rect;
+			
+			if(retang != null)
+			{
+				offScreenGraphics.drawRect(retang.x, retang.y,retang.width, retang.height);
+			}
 			
 			//desenha marcador
 			if (line != null)
@@ -140,14 +159,22 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 				);
 				
 				colisionDetector.check(this.fruitAnimation.getFruitList(), line);
-				//drawRect(sinalizadorObj.getX1()x, sinalizadorObj.y
-				//,sinalizadorObj.width, sinalizadorObj.height);
 			}
 			
 			g.drawImage(borda, 0, 0, null);
 			
 			fruitAnimation.recalcule();
 			fruitAnimation.paint(g);
+			
+			//title do score
+			g.drawString(titleScore.getIterator(), this.getWidth()- 140, this.getHeight()-20);
+			
+			//valor do score
+			score = new AttributedString(String.valueOf(colisionDetector.getScore()));
+			score.addAttribute(TextAttribute.FOREGROUND, Color.RED);
+			score.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
+
+			g.drawString(score.getIterator(), this.getWidth()-50, this.getHeight()-20);
 		}
 	}
 

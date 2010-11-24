@@ -14,11 +14,14 @@ import org.furb.ui.fruit.Fruit;
  */
 public class ColisionDetector {
 
+	private int score;
+	
 	/**
 	 * Construtor padrao.
 	 */
 	public ColisionDetector() {
 		super();
+		score = 0;
 	}
 	
 	/**
@@ -30,18 +33,40 @@ public class ColisionDetector {
 	{
 		for( Fruit shape : shapeList )
 		{
-			final boolean isIntersection = rootObj.intersects(
-				shape.getX(),
-				shape.getY(),
-				shape.getWidth(), 
-				shape.getHeight()
-			);
-			
-			if( isIntersection ) 
+			//só verifica os objetos ainda não destruidos
+			if(!shape.isDestroyed())
 			{
-				shape.setDestroyed(true);
-				shape.setHits( shape.getHits()+1 );
+				final boolean isIntersection = rootObj.intersects(
+						shape.getX(),
+						shape.getY(),
+						shape.getWidth(), 
+						shape.getHeight()
+					);
+					
+					if( isIntersection ) 
+					{
+						shape.setDestroyed(true);
+						shape.setHits( shape.getHits()+1 );
+						
+						if(!shape.isBomb())
+						{
+							score += 10;	
+						}
+						else
+						{
+							score -= 20;
+						}
+						
+					}
 			}
+
 		}
 	}
+
+	public int getScore() 
+	{
+		return score;
+	}
+	
+	
 }

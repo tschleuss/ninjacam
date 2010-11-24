@@ -18,10 +18,18 @@ public class Fruit {
 	private ImageIcon img;
 	private int hits;
 	private boolean destroyed;
+	private boolean invisible;
+	private boolean bomb;
+	private int countExplosion;
+	
+	private final int maxCountExplosion = 5;
 	
 	public Fruit() {
 		super();
+		this.countExplosion = 0;
 		this.destroyed = false;
+		this.invisible = false;
+		this.bomb = false;
 	}
 
 	/**
@@ -120,7 +128,50 @@ public class Fruit {
 	/**
 	 * @param destroyed the destroyed to set
 	 */
-	public final void setDestroyed(boolean destroyed) {
+	public final void setDestroyed(boolean destroyed) 
+	{
 		this.destroyed = destroyed;
+	}
+	
+	public final boolean isInvisible() {
+		return invisible;
+	}
+	
+	public final void setInvisible(boolean invisible)
+	{
+		this.invisible = invisible;
+	}
+	
+	public final void setBomb(boolean bomb)
+	{
+		this.bomb = bomb;
+	}
+	
+	public final boolean isBomb()
+	{
+		return bomb;
+	}
+
+	public final void clearExplosion()
+	{
+		countExplosion = 0;
+		this.invisible = false;
+		this.destroyed = false;
+	}
+	
+	/**
+	 * Controla a quantidade de frames de explosão
+	 */
+	public final void CountExplosion() 
+	{
+		//desenha o frame da explosão apenas 5 vezes
+		if(countExplosion < maxCountExplosion)
+		{
+			countExplosion++;
+		}
+		else
+		{
+			this.invisible = true;
+		}
 	}
 }

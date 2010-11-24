@@ -21,6 +21,7 @@ public class FruitAnimation {
 
 	private List<Fruit> fruitList = null;
 	private Random rnd = null;
+	private ImageIcon explosion = null;
 	
 	private int velocidadeQueda;
 	
@@ -38,6 +39,8 @@ public class FruitAnimation {
 	public void init() {
 		rnd = new Random(System.currentTimeMillis());
 		fruitList = new ArrayList<Fruit>();
+		explosion = new ImageIcon(this.getClass().getResource("/org/furb/img/gif/Explosion.gif"));
+		
 		/*
 		fruitList.add( getFruit("Apple.png")		);
 		fruitList.add( getFruit("Apple2.png")		);
@@ -54,6 +57,10 @@ public class FruitAnimation {
 		fruitList.add( getFruit("gif/Strawberry.gif")	);
 		fruitList.add( getFruit("gif/Orange.gif")		);
 		
+		Fruit bomb = getFruit("gif/marioBomb.gif");
+		bomb.setBomb(true);
+		fruitList.add(bomb);
+		
 		this.velocidadeQueda = 10;
 	}
 	
@@ -63,12 +70,17 @@ public class FruitAnimation {
 	 */
 	public void recalcule() {
 		for( Fruit f : fruitList ) {
-			if( f.getY() < SystemConfig.APP_HEIGHT && !f.isDestroyed() ) {
+			
+			if( f.getY() < SystemConfig.APP_HEIGHT) 
+			{
 				f.setY( f.getY() + this.velocidadeQueda );
-			} else {
+			} else 
+			{
 				f.setX( rnd.nextInt(SystemConfig.APP_WIDTH) );
 				f.setY( rnd.nextInt(SystemConfig.APP_HEIGHT) * -1 );
-				f.setDestroyed(false);
+				
+				//reseta estado da fruta
+				f.clearExplosion();
 			}
 		}
 	}
@@ -80,11 +92,20 @@ public class FruitAnimation {
 	 * @param g
 	 */
 	public void paint(Graphics g) {
+		
 		for( Fruit f : fruitList ) {
-			if( f.isDestroyed() ) {
-				//FAZ ALGO..
-			} else {
-				g.drawImage(f.getImg().getImage(), f.getX(), f.getY(), null);
+			//desenha apenas se está visível
+			if(!f.isInvisible())
+			{
+				if( f.isDestroyed() ) {
+					//exibe a imagem da explosão
+					g.drawImage(explosion.getImage(), f.getX(), f.getY(), null);
+					f.CountExplosion();
+				}
+				else
+				{
+					g.drawImage(f.getImg().getImage(), f.getX(), f.getY(), null);
+				}
 			}
 		}
 	}
