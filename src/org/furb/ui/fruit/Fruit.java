@@ -21,8 +21,7 @@ public class Fruit {
 	private boolean invisible;
 	private boolean bomb;
 	private int countExplosion;
-	
-	private final int maxCountExplosion = 5;
+	private final int maxCountExplosion = 10;
 	
 	public Fruit() {
 		super();
