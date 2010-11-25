@@ -3,12 +3,16 @@ package org.furb.ui.fruit;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+import org.furb.utils.ResourceLocator;
 import org.furb.utils.SystemConfig;
 
 /**
@@ -36,30 +40,37 @@ public class FruitAnimation {
 	 * Inicializa as frutas a serem
 	 * exibidas em tela.
 	 */
-	public void init() {
+	public void init() 
+	{
 		rnd = new Random(System.currentTimeMillis());
 		fruitList = new ArrayList<Fruit>();
 		explosion = new ImageIcon(this.getClass().getResource("/org/furb/img/gif/Explosion.gif"));
+				
+//		fruitList.add( getFruit("Apple.png")		);
+//		fruitList.add( getFruit("Apple2.png")		);
+//		fruitList.add( getFruit("Kiwi.png") 		);
+//		fruitList.add( getFruit("Lemon.png")		);
+//		fruitList.add( getFruit("Lime.png")			);
+//		fruitList.add( getFruit("Orange.png")		);
+//		fruitList.add( getFruit("Orange2.png")		);
+//		fruitList.add( getFruit("Strawberry.png")	);
+//		fruitList.add( getFruit("Tomato.png")		);
+
+		for( int i = 0; i < 2; i++ )
+		{
+			fruitList.add( getFruit("gif/apple.gif")		);
+			fruitList.add( getFruit("gif/Strawberry.gif")	);
+			fruitList.add( getFruit("gif/Orange.gif")		);	
+		}
 		
-		/*
-		fruitList.add( getFruit("Apple.png")		);
-		fruitList.add( getFruit("Apple2.png")		);
-		fruitList.add( getFruit("Kiwi.png") 		);
-		fruitList.add( getFruit("Lemon.png")		);
-		fruitList.add( getFruit("Lime.png")			);
-		fruitList.add( getFruit("Orange.png")		);
-		fruitList.add( getFruit("Orange2.png")		);
-		fruitList.add( getFruit("Strawberry.png")	);
-		fruitList.add( getFruit("Tomato.png")		);
-		*/
+		Fruit bomb = null;
 		
-		fruitList.add( getFruit("gif/apple.gif")		);
-		fruitList.add( getFruit("gif/Strawberry.gif")	);
-		fruitList.add( getFruit("gif/Orange.gif")		);
-		
-		Fruit bomb = getFruit("gif/marioBomb.gif");
-		bomb.setBomb(true);
-		fruitList.add(bomb);
+		for( int i = 0; i < 3; i++ )
+		{
+			bomb = getFruit("gif/Bomb.gif");
+			bomb.setBomb(true);
+			fruitList.add(bomb);	
+		}
 		
 		this.velocidadeQueda = 10;
 	}
@@ -68,13 +79,15 @@ public class FruitAnimation {
 	 * Recalcula a posicao
 	 * das frutas na tela.
 	 */
-	public void recalcule() {
+	public void recalcule() 
+	{
 		for( Fruit f : fruitList ) {
 			
 			if( f.getY() < SystemConfig.APP_HEIGHT) 
 			{
 				f.setY( f.getY() + this.velocidadeQueda );
-			} else 
+			} 
+			else 
 			{
 				f.setX( rnd.nextInt(SystemConfig.APP_WIDTH) );
 				f.setY( rnd.nextInt(SystemConfig.APP_HEIGHT) * -1 );
@@ -125,18 +138,22 @@ public class FruitAnimation {
 			
 			fruit = new Fruit();
 			
-			/*
-			final MessageFormat mf = new MessageFormat("/org/furb/img/{0}");
-			final String fruitPath = mf.format(new Object[]{name});
+			if( name.indexOf(".gif") == -1 ) 
+			{
+				final MessageFormat mf = new MessageFormat("/org/furb/img/{0}");
+				final String fruitPath = mf.format(new Object[]{name});
+				
+				InputStream fruitIs = ResourceLocator.getResource(fruitPath, FruitAnimation.class); 
+				BufferedImage fruitImg = ImageIO.read(fruitIs);
+				fruitImg = resize(fruitImg, SystemConfig.FRUIT_WIDTH, SystemConfig.FRUIT_HEIGHT);
+				fruit.setImg(new ImageIcon(fruitImg));
+			} 
+			else {
+				
+				ImageIcon fruitImage = new ImageIcon(this.getClass().getResource("/org/furb/img/" + name));
+				fruit.setImg(fruitImage);
+			}
 			
-			InputStream fruitIs = ResourceLocator.getResource(fruitPath, FruitAnimation.class); 
-			BufferedImage fruitImg = ImageIO.read(fruitIs);
-			fruitImg = resize(fruitImg, SystemConfig.FRUIT_WIDTH, SystemConfig.FRUIT_HEIGHT);
-			*/
-			
-			ImageIcon fruitImage = new ImageIcon(this.getClass().getResource("/org/furb/img/" + name));
-			
-			fruit.setImg(fruitImage);
 			fruit.setX( rnd.nextInt(SystemConfig.APP_WIDTH) );
 			fruit.setY( rnd.nextInt(SystemConfig.APP_HEIGHT)*-1 );
 			

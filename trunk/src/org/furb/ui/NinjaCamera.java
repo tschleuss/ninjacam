@@ -35,6 +35,7 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private boolean debug = true;
 	private final static BasicStroke stroke = new BasicStroke(5.0f);
 	private PixelSource camera;
 	private BufferedImage borda;
@@ -79,7 +80,8 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 		
 		titleScore = new AttributedString("PONTUACAO: ");
 		titleScore.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
-		titleScore.addAttribute(TextAttribute.FOREGROUND, Color.BLUE);
+		titleScore.addAttribute(TextAttribute.FOREGROUND, Color.WHITE);
+		titleScore.addAttribute(TextAttribute.SIZE, 24);
 
 		colisionDetector = new ColisionDetector();
 		fruitAnimation = new FruitAnimation();
@@ -133,21 +135,24 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 			line = this.marcador.getMarcador();
 			retang = this.marcador.rect;
 			
-			if(retang != null)
+			if(retang != null && debug )
 			{
 				g2d.drawRect(retang.x, retang.y,retang.width, retang.height);
 			}
 			
 			//desenha marcador
-			if (line != null)
+			if (line != null )
 			{
-				g2d.setColor(Color.BLACK);
-				g2d.setBackground(Color.BLACK);
-				g2d.setStroke(stroke);
-				g2d.drawLine(
-					(int)line.getX1(), (int)line.getY1(), 
-					(int)line.getX2(), (int)line.getY2()
-				);
+				if( debug == true )
+				{
+					g2d.setColor(Color.BLACK);
+					g2d.setBackground(Color.BLACK);
+					g2d.setStroke(stroke);
+					g2d.drawLine(
+						(int)line.getX1(), (int)line.getY1(), 
+						(int)line.getX2(), (int)line.getY2()
+					);	
+				}
 				
 				//Verifica a colisao com as frutas
 				colisionDetector.check(this.fruitAnimation.getFruitList(), line);
@@ -160,12 +165,13 @@ public class NinjaCamera extends JFrame implements VideoListener, MouseListener
 			fruitAnimation.paint(g);
 			
 			//title do score
-			g.drawString(titleScore.getIterator(), this.getWidth()- 140, this.getHeight()-20);
+			g.drawString(titleScore.getIterator(), this.getWidth()-250, this.getHeight()-20);
 			
 			//valor do score
 			score = new AttributedString(String.valueOf(colisionDetector.getScore()));
 			score.addAttribute(TextAttribute.FOREGROUND, Color.RED);
 			score.addAttribute(TextAttribute.WEIGHT, TextAttribute.WEIGHT_BOLD);
+			score.addAttribute(TextAttribute.SIZE, 24);
 
 			g.drawString(score.getIterator(), this.getWidth()-50, this.getHeight()-20);
 		}
