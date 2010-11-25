@@ -22,12 +22,12 @@ public final class SystemConfig {
 	/**
 	 * Width da camera da aplicacao.
 	 */
-	public static final int CAM_WIDTH = 480;//320;//480;
+	public static final int CAM_WIDTH = 320;//320;//480;
 	
 	/**
 	 * Height da camera da aplicacao.
 	 */
-	public static final int CAM_HEIGHT = 360;//240;//360;
+	public static final int CAM_HEIGHT = 240;//240;//360;
 	
 	/**
 	 * Width da imagem da fruta.

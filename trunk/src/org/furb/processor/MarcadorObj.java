@@ -41,10 +41,10 @@ public class MarcadorObj
 		Point p2 = new Point(0,0);
 		
 		//varre todas as linahs da imagem
-		for (int x = 1; x < rasterImagem.getHeight() - 1; x+=20) 
+		for (int x = 1; x < rasterImagem.getHeight() - 1; x++) 
 		{
 			//varre todas as colunas desta linha
-			for (int y = 1; y < rasterImagem.getWidth() - 1; y+=20) 
+			for (int y = 1; y < rasterImagem.getWidth() - 1; y++) 
 			{
 				//pega o RGB de um determinado pixel
 				rasterImagem.getPixel(y, x, pixelRGB);
@@ -62,7 +62,6 @@ public class MarcadorObj
 						p1 = new Point(coords[1], coords[0]);
 					} else {
 						//adiciona o pixel ao retangulo que está marcando a imagem
-						
 						this.rect.add(coords[1], coords[0]);
 						p2.x =  coords[1];
 						p2.y =  coords[0];
