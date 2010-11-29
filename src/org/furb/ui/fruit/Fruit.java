@@ -6,7 +6,6 @@ import javax.swing.ImageIcon;
  * Entidade responsavel por armazenas
  * as propriedades das frutas que
  * sao desenhas na tela.
- * @author tschleuss - tschleuss@gmail.com
  * @since Nov 13, 2010
  */
 public class Fruit {

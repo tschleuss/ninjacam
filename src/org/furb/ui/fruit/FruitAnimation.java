@@ -18,7 +18,6 @@ import org.furb.utils.SystemConfig;
 /**
  * Classe responsavel por realizar
  * as animacoes com as frutas em cena.
- * @author tschleuss - tschleuss@gmail.com
  * @since Nov 13, 2010
  */
 public class FruitAnimation {

@@ -9,7 +9,6 @@ import org.furb.ui.fruit.Fruit;
  * Classe responsavel por veriricar
  * a colisao entre o item detectado
  * em tela com os elementos interativos.
- * @author tschleuss - tschleuss@gmail.com
  * @since Nov 22, 2010
  */
 public class ColisionDetector {
