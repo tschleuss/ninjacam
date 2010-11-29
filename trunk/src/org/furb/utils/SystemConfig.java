@@ -4,7 +4,6 @@ package org.furb.utils;
  * Contem informacoes staticas
  * do programa, que podem ser
  * compartilhadas por todo o sistema
- * @author tschleuss - tschleuss@gmail.com
  * @since Nov 13, 2010
  */
 public final class SystemConfig {

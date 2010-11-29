@@ -6,7 +6,6 @@ import java.io.InputStream;
 /**
  * Classe utilitaria para localizacao
  * dos resources da aplicacao.
- * @author tschleuss - tschleuss@gmail.com
  * @since Nov 13, 2010
  */
 public final class ResourceLocator {
